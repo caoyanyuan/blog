@@ -72,13 +72,34 @@ router.post('/user/login', function(req, res, next){
         username:username,
         password:password
     }).then(function(userInfo){
-        if(userInfo){
-            responseData.message = '登录成功';
-            responseData.username = userInfo.username;
+        if(!userInfo) {
+            responseData.code = 2;
+            responseData.message = '用户名或密码错误';
             res.json(responseData);
+            return;
         }
+
+        responseData.message = '登录成功';
+        responseData.userInfo = {
+            id: userInfo.id,
+            username: userInfo.username
+        };
+
+        req.cookies.set('userInfo',JSON.stringify({
+            id: userInfo.id,
+            username: userInfo.username
+        }))
+
+        res.json(responseData);
+        return;
     })
 
 })
+
+router.get('/user/logout', function(req, res, next) {
+    req.cookies.set('userInfo', null);
+    res.json(responseData);
+});
+
 
 module.exports = router;

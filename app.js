@@ -10,6 +10,9 @@ var bodyParser = require('body-parser');
 //加载cookies模块
 var Cookies = require('cookies');
 //创建app应用 => NodeJS Http.createServer();
+
+var User = require('./models/User')
+
 var app = express();
 
 //设置静态文件托管
@@ -30,6 +33,36 @@ swig.setDefaults({cache: false});
 //bodyparser设置
 app.use( bodyParser.urlencoded({extended: true}) );
 
+//设置cookie
+app.use(function(req, res, next){
+    req.cookies = new Cookies(req, res);
+
+    //解析登录用户的cookie信息
+    req.userInfo = {};
+
+    if(req.cookies.get('userInfo')){
+        try{
+            req.userInfo = JSON.parse(req.cookies.get('userInfo'));
+
+            //获取当前登录用户的类型，是否是管理员
+            User.findById(req.userInfo.id).then(function(userInfo){
+               req.userInfo.isAdmin = Boolean(userInfo.isAdmin);
+               console.info(req.userInfo)
+               next();
+            })
+        }catch(e){
+            next()
+        }
+    }else{
+        next()
+    }
+
+})
+
+
+/*
+* 根据不同的功能划分模块
+* */
 app.use('/admin', require('./routers/admin'));
 app.use('/api', require('./routers/api'));
 app.use('/', require('./routers/main'));

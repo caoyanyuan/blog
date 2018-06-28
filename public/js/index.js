@@ -60,13 +60,21 @@ $(function() {
                 $loginBox.find('.colWarning').html(result.message);
                 if(result.code == 0){
                     setTimeout(function(){
-                        $infoBox.show();
-                        $infoBox.find('.name').text(result.username);
-                        $loginBox.hide();
-                    })
+                        window.location.reload();
+                    },1000)
                 }
             }
         })
     })
 
+    $('#logoutBtn').on('click',function(){
+        $.ajax({
+            url:'api/user/logout',
+            success:function(res){
+                if (!res.code) {
+                    window.location.reload();
+                }
+            }
+        })
+    })
 })
