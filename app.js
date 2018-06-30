@@ -47,7 +47,6 @@ app.use(function(req, res, next){
             //获取当前登录用户的类型，是否是管理员
             User.findById(req.userInfo.id).then(function(userInfo){
                req.userInfo.isAdmin = Boolean(userInfo.isAdmin);
-               console.info(req.userInfo)
                next();
             })
         }catch(e){

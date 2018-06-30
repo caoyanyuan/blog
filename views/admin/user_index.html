@@ -9,8 +9,6 @@
 
 <h3>用户列表</h3>
 
-{% include 'page.html' %}
-
 <table class="table table-hover table-striped">
 
     <tr>
@@ -20,7 +18,7 @@
         <th>是否是管理员</th>
     </tr>
 
-    {% for user in users %}
+    {% for user in userList %}
     <tr>
         <td>{{user._id.toString()}}</td>
         <td>{{user.username}}</td>
