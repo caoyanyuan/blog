@@ -1,0 +1,14 @@
+{% if breads %}
+<ol class="breadcrumb">
+    <li><a href="/admin">管理首页</a></li>
+    {% for bread in breads %}
+    <li>
+        {% if bread.url%}
+        <a href="{{bread.url}}"><span>{{bread.title}}</span></a>
+        {% else %}
+        <span>{{bread.title}}</span>
+        {% endif%}
+    </li>
+    {% endfor %}
+</ol>
+{% endif%}
